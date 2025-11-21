@@ -6,8 +6,9 @@ import {
   Param,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { AppService } from './app.service';
+import { AuthGuard } from './auth/auth.guard';
 import { CalculateService } from './calculate/calculate.service';
 import { CommentService } from './comment/comment.service';
 import { ContactService } from './contact/contact.service';
@@ -18,7 +19,6 @@ import { UserService } from './user/user.service';
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService,
     private readonly startService: StartService,
     private readonly commentService: CommentService,
     private readonly contactService: ContactService,
@@ -27,17 +27,13 @@ export class AppController {
     private readonly userService: UserService,
   ) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
-
   @Get('ping')
   ping() {
     return { status: 'ok', message: 'Все ОК' };
   }
 
   @Get('start')
+  @UseGuards(AuthGuard)
   async getStart() {
     const start = await this.startService.getStart();
     if (!start) {
@@ -47,6 +43,7 @@ export class AppController {
   }
 
   @Post('start')
+  @UseGuards(AuthGuard)
   async updateStart(
     @Body()
     body: {
@@ -58,11 +55,13 @@ export class AppController {
   }
 
   @Get('comments')
+  @UseGuards(AuthGuard)
   async getComments() {
     return await this.commentService.getAllComments();
   }
 
   @Post('comments')
+  @UseGuards(AuthGuard)
   async createComment(
     @Body()
     body: {
@@ -79,12 +78,14 @@ export class AppController {
   }
 
   @Delete('comments/:id')
+  @UseGuards(AuthGuard)
   async deleteComment(@Param('id') id: string) {
     const deleted = await this.commentService.deleteComment(parseInt(id, 10));
     return { success: deleted };
   }
 
   @Get('contacts')
+  @UseGuards(AuthGuard)
   async getContacts() {
     const contact = await this.contactService.getContact();
     if (!contact) {
@@ -94,6 +95,7 @@ export class AppController {
   }
 
   @Post('contacts')
+  @UseGuards(AuthGuard)
   async updateContacts(
     @Body()
     body: {
@@ -113,11 +115,13 @@ export class AppController {
   }
 
   @Get('portfolios')
+  @UseGuards(AuthGuard)
   async getPortfolios() {
     return await this.portfolioService.getAllPortfolios();
   }
 
   @Post('portfolios')
+  @UseGuards(AuthGuard)
   async createPortfolio(
     @Body()
     body: {
@@ -134,6 +138,7 @@ export class AppController {
   }
 
   @Delete('portfolios/:id')
+  @UseGuards(AuthGuard)
   async deletePortfolio(@Param('id') id: string) {
     const deleted = await this.portfolioService.deletePortfolio(
       parseInt(id, 10),
@@ -142,6 +147,7 @@ export class AppController {
   }
 
   @Get('users')
+  @UseGuards(AuthGuard)
   async getUsers(@Query('skip') skip?: string, @Query('take') take?: string) {
     const skipNum = skip ? parseInt(skip, 10) : undefined;
     const takeNum = take ? parseInt(take, 10) : undefined;
@@ -149,6 +155,7 @@ export class AppController {
   }
 
   @Get('calculate')
+  @UseGuards(AuthGuard)
   async getCalculate(): Promise<{
     id: string;
     step1Question: string;
@@ -186,6 +193,7 @@ export class AppController {
   }
 
   @Post('calculate')
+  @UseGuards(AuthGuard)
   async updateCalculate(
     @Body()
     body: {

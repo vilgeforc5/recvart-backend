@@ -31,6 +31,18 @@
 $ pnpm install
 ```
 
+## Environment Configuration
+
+Create a `.env` file in the root directory with the following variables:
+
+```env
+AUTH_LOGIN=admin
+AUTH_PASSWORD=admin
+AUTH_TOKEN=your-pregenerated-token-here-change-in-production
+```
+
+**Important**: Change these values in production! The `.env` file is already in `.gitignore` and will not be committed to version control.
+
 ## Compile and run the project
 
 ```bash

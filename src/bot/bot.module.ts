@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TelegrafModule } from 'nestjs-telegraf';
+import { BotCommandsService } from './bot-commands.service';
 import { CalculateCommandModule } from './calculate-command/calculate-command.module';
 import { CommentCommandModule } from './comment-command/comment-command.module';
 import { ContactCommandModule } from './contact-command/contact-command.module';
@@ -23,5 +24,6 @@ import { StartCommandModule } from './start-command/start-command.module';
     PingCommandModule,
     CalculateCommandModule,
   ],
+  providers: [BotCommandsService],
 })
 export class BotModule {}
